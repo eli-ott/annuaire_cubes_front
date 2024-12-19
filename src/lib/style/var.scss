@@ -1,0 +1,36 @@
+/** The colors */
+$dark: #1C110A;
+$light: #E4FDE1;
+$blue: #456990;
+
+/** The variables for the font sizes */
+$font-weights: (
+	header: 600,
+	content: 400
+);
+//font sizes
+$font-sizes: (
+	desktop: (
+		xx-small: 12px,
+		x-small: 17px,
+		small: 19px,
+		medium: 25px,
+		large: 44px,
+		x-large: 64px,
+		xx-large: 94px
+	),
+	mobile: (
+		x-small: 13px,
+		small: 17px,
+		medium: 24px,
+		large: 26px,
+		x-large: 28px,
+		xx-large: 54px
+	)
+);
+
+$margin-xs: 5px;
+$margin-s: 10px;
+$margin-m: 15px;
+$margin-l: 30px;
+$margin-xl: 50px;

@@ -1,0 +1,38 @@
+@use './var';
+
+/**
+ * Create a flex display with center alignment by default
+ */
+@mixin flex($direction: row, $wrap: nowrap, $justify: center, $align: center, $gap: 0) {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-flow: $direction $wrap;
+	flex-flow: $direction $wrap;
+	-webkit-box-pack: $justify;
+	-ms-flex-pack: $justify;
+	justify-content: $justify;
+	-webkit-box-align: $align;
+	-ms-flex-align: $align;
+	align-items: $align;
+	gap: $gap;
+}
+
+/**
+   * Permet de définir la taille de police
+   */
+@mixin setFont($size) {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-weight: 400;
+	font-style: normal;
+	font-optical-sizing: auto;
+
+	@media screen and (width <= 1024px) {
+		font-size: map-get(var.$font-sizes, 'mobile', $size);
+	}
+	@media screen and (width > 1024px) {
+		font-size: map-get(var.$font-sizes, 'desktop', $size);
+	}
+}
