@@ -1,11 +1,10 @@
 import type { Service } from './Service';
-import type { MainDates } from './Shared';
 import type { Site } from './Site';
 
 /** L'interface pour un salarie */
-export interface Salarie extends MainDates {
+export interface Salarie {
 	/** L'id */
-	idSalarie: number;
+	id: number;
 	/** Son nom */
 	nom: string;
 	/** Son prénom */

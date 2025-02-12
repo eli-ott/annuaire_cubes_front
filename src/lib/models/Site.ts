@@ -1,11 +1,9 @@
-import type { MainDates } from "./Shared";
-
 /** L'interface pour le site d'un employé */
-export interface Site extends MainDates {
+export interface Site {
     /** L'id */
     idSite: number;
     /** Le nom */
-    site:  string;
+    nom:  string;
     /** La ville */
     ville: string;
 }

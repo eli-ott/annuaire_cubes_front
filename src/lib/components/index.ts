@@ -1,1 +1,2 @@
-export { default as Header } from './Header.svelte';
+export { default as Select } from './Select.svelte';
+export { default as Salarie } from './Salarie.svelte';
