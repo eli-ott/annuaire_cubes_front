@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Filter from '$lib/components/Filter.svelte';
 	import { Salarie, Select } from '$lib/components/index.js';
+	import { Button } from 'flowbite-svelte';
 
 	let { data } = $props();
 </script>
@@ -14,6 +15,7 @@
 			Recherchez vos collègues ou interlocuteurs en fonction de leurs services, site, nom etc.
 		</p>
 	</div>
+	<Button>Ceci est un bouton</Button>
 	<section class="list-container">
 		<div class="filter-container">
 			<Filter services={data.services} sites={data.sites} />
