@@ -1,46 +1,32 @@
 import { API_KEY, API_URL } from '$env/static/private';
-import type { Salarie } from '$lib/models/Salarie';
-import type { Service } from '$lib/models/Service';
-import type { Site } from '$lib/models/Site';
 import type { PageServerLoad } from './$types';
 
-const getServices = async (): Promise<Service[]> => {
+export const load: PageServerLoad = async ({ cookies }) => {
 	const services = await fetch(API_URL + 'service', {
 		headers: {
 			ApiKey: API_KEY
 		}
 	});
-	const res = await services.json();
+	const servicesRes = await services.json();
 
-	return res.data;
-};
-
-const getSites = async (): Promise<Site[]> => {
 	const sites = await fetch(API_URL + 'site', {
 		headers: {
 			ApiKey: API_KEY
 		}
 	});
-	const res = await sites.json();
+	const sitesRes = await sites.json();
 
-	return res.data;
-};
-
-const getSalaries = async (): Promise<Salarie[]> => {
 	const salaries = await fetch(API_URL + 'salarie', {
 		headers: {
 			ApiKey: API_KEY
 		}
 	});
-	const res = await salaries.json();
+	const salariesRes = await salaries.json();
 
-	return res.data;
-};
-
-export const load: PageServerLoad = async () => {
 	return {
-		services: await getServices(),
-		sites: await getSites(),
-		salaries: await getSalaries()
+		services: servicesRes.data,
+		sites: sitesRes.data,
+		salaries: salariesRes.data,
+		authed: cookies.get('token') ? true : false
 	};
 };

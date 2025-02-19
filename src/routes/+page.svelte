@@ -1,9 +1,14 @@
 <script lang="ts">
-	import Filter from '$lib/components/Filter.svelte';
-	import { Salarie, Select } from '$lib/components/index.js';
-	import DataTable, { Body, Cell, Head, Row, SortValue } from '@smui/data-table';
+	import { Salarie, Filter, SalariePage, ServicePage } from '$lib/components/index';
+	import SitePage from '$lib/components/SitePage.svelte';
+	import type { Salarie as SalarieType } from '$lib/models/Salarie.js';
+	import type { PageProps } from './$types.js';
+	import Tab, { Label } from '@smui/tab';
+	import TabBar from '@smui/tab-bar';
 
-	let { data } = $props();
+	let { data }: PageProps = $props();
+	let salaries: SalarieType[] = $state(data.salaries);
+	let activePage = $state('Salaries');
 </script>
 
 <main>
@@ -15,31 +20,24 @@
 			Recherchez vos collègues ou interlocuteurs en fonction de leurs services, site, nom etc.
 		</p>
 	</div>
-	<section class="list-container">
-		<div class="filter-container">
-			<Filter services={data.services} sites={data.sites} />
-		</div>
-		<div class="salaries-container">
-			<DataTable table$aria-label="Salaries">
-				<Head>
-					<Row>
-						<Cell>Nom</Cell>
-						<Cell>Prénom</Cell>
-						<Cell>Tel. portable</Cell>
-						<Cell>Tel. fixe</Cell>
-						<Cell>Email</Cell>
-						<Cell>Service</Cell>
-						<Cell>Site</Cell>
-					</Row>
-				</Head>
-				<Body>
-					{#each data.salaries as salarie}
-						<Salarie {salarie} />
-					{/each}
-				</Body>
-			</DataTable>
-		</div>
-	</section>
+
+	<div class="tab-container">
+		<TabBar tabs={['Salaries', 'Services', 'Sites']} bind:active={activePage}>
+			{#snippet tab(tab)}
+				<Tab {tab}>
+					<Label>{tab}</Label>
+				</Tab>
+			{/snippet}
+		</TabBar>
+
+		{#if activePage === 'Salaries'}
+			<SalariePage {data}></SalariePage>
+		{:else if activePage === 'Services'}
+			<ServicePage {data} form></ServicePage>
+		{:else if activePage === 'Sites'}
+			<SitePage {data} form></SitePage>
+		{/if}
+	</div>
 </main>
 
 <style lang="scss">
@@ -49,14 +47,15 @@
 		width: 95%;
 	}
 	main {
-		height: 100vh;
+		@include main.flex($direction: column, $gap: calc(main.$margin-xl * 3));
 
-		.list-container {
-			.salaries-container {
-				@include main.flex();
+		width: 100%;
+		padding: main.$margin-m;
 
-				width: 100%;
-			}
+		.tab-container {
+			@include main.flex($direction: column, $gap: main.$margin-m);
+
+			width: 100%;
 		}
 	}
 </style>

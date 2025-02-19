@@ -1,100 +1,122 @@
 <script lang="ts">
 	import type { Service } from '$lib/models/Service';
 	import type { Site } from '$lib/models/Site';
+	import TextField from '@smui/textfield';
+	import Checkbox from '@smui/checkbox';
+	import FormField from '@smui/form-field';
+	import Button, { Label } from '@smui/button';
 
-	let { services = $bindable(), sites = $bindable() }: { services: Service[]; sites: Site[] } =
-		$props();
-	let sitesSelected = $state([]);
+	let {
+		services,
+		sites,
+		filter,
+		sitesSelected = $bindable(),
+		servicesSelected = $bindable(),
+		search = $bindable()
+	}: {
+		services: Service[];
+		sites: Site[];
+		filter: any;
+		sitesSelected: number[];
+		servicesSelected: number[];
+		search: string | undefined;
+	} = $props();
 </script>
 
-<aside class="filter">
-	<div class="filter-section services-container">
-		<p class="filter-title">Services</p>
-		<div class="options-container">
-			{#each services as service, index}
-				<div class="service">
-					<label for="service-{index}">
-						<input type="checkbox" name="services" id="service-{index}" />
-						<div class="checkbox-container"></div>
-						{service.nom}
-					</label>
-				</div>
-			{/each}
+<aside>
+	<h6>Filtres</h6>
+	<div class="filters-container">
+		<div class="filter-section search-container">
+			<p class="filter-title">Recherche</p>
+			<TextField
+				type="email"
+				bind:value={search}
+				label="Recherche"
+				input$width="100"
+				style="width: 100%"
+				input$emptyValueUndefined
+			></TextField>
+		</div>
+		<div class="filter-section services-container">
+			<p class="filter-title">Services</p>
+			<div class="options-container">
+				{#each services as service, index}
+					<FormField>
+						<Checkbox input$id="service-{index}" bind:group={servicesSelected} value={service.id}
+						></Checkbox>
+						<label for="service-{index}">{service.nom}</label>
+					</FormField>
+				{/each}
+			</div>
+		</div>
+		<div class="filter-section sites-container">
+			<p class="filter-title">Sites</p>
+			<div class="options-container">
+				{#each sites as site, index}
+					<FormField>
+						<Checkbox input$id="site-{index}" bind:group={sitesSelected} value={site.id}></Checkbox>
+						<label for="site-{index}">{site.nom} ({site.ville})</label>
+					</FormField>
+				{/each}
+			</div>
 		</div>
 	</div>
-	<div class="filter-section sites-container">
-		<p class="filter-title">Sites</p>
-		<div class="options-container">
-			{#each sites as site, index}
-				<div class="site">
-					<label for="site-{index}">
-						<input type="checkbox" name="sites" id="site-{index}" />
-						<div class="checkbox-container"></div>
-						{site.nom}
-						{site.ville}
-					</label>
-				</div>
-			{/each}
-		</div>
-	</div>
-	<button>Appliquer les filtres</button>
+	<Button variant="unelevated" onclick={filter}>
+		<Label>Appliquer les filtres</Label>
+	</Button>
 </aside>
 
 <style lang="scss">
 	@use '$lib/style/main';
 
+	:global(.mdc-form-field) {
+		@include main.flex();
+	}
 	aside {
-		@include main.flex($direction: column, $justify: start, $align: start, $gap: main.$margin-l);
+		@include main.flex(
+			$direction: column,
+			$justify: start,
+			$align: start,
+			$gap: main.$margin-l,
+			$wrap: nowrap
+		);
 		position: sticky;
 
 		top: 0;
 		left: 0;
-		width: 350px;
-		height: 100vh;
+		width: 100%;
 
-		.filter-section {
-			@include main.flex($direction: column, $justify: start, $align: start, $gap: main.$margin-s);
+		h6 {
+			font-size: 23px;
+			text-decoration: underline;
+		}
 
-			.filter-title {
-				font-size: 19px;
-			}
+		.filters-container {
+			@include main.flex($justify: start, $align: start);
 
-			.options-container {
+			width: 100%;
+
+			.filter-section {
 				@include main.flex(
 					$direction: column,
 					$justify: start,
 					$align: start,
-					$gap: main.$margin-xs
+					$gap: main.$margin-s
 				);
 
-				label {
-					position: relative;
+				width: 100%;
 
-					input {
-						visibility: hidden;
+				.filter-title {
+					font-size: 19px;
+				}
 
-						height: 15px;
-						width: 15px;
-
-						&:hover ~ .checkbox-container {
-							background: rgba(255, 255, 255, 0.587);
-						}
-						&:checked ~ .checkbox-container {
-							background: main.$blue;
-						}
-					}
-					.checkbox-container {
-						@include main.flex();
-						content: '\A0';
-						position: absolute;
-
-						height: 15px;
-						width: 15px;
-						left: 0;
-						top: 0;
-
-						border: solid 1px main.$light;
-					}
+				.options-container {
+					@include main.flex(
+						$direction: column,
+						$justify: start,
+						$align: start,
+						$gap: main.$margin-xs
+					);
 				}
 			}
 		}

@@ -1,10 +1,30 @@
 <script lang="ts">
 	import type { Salarie } from '$lib/models/Salarie';
-	import Card, { Content } from '@smui/card';
-	import Chip, { Set, Text } from '@smui/chips';
-	import DataTable, { Body, Cell, Head, Row } from '@smui/data-table';
+	import { Cell, Row } from '@smui/data-table';
+	import Button from '@smui/button';
 
-	let { salarie = $bindable() }: { salarie: Salarie } = $props();
+	let {
+		salarie = $bindable(),
+		authed = $bindable(),
+		removeSalarie
+	}: { salarie: Salarie; authed: boolean; removeSalarie: any } = $props();
+
+	const deleteElement = async () => {
+		const deleteFetch = await fetch('/api', {
+			method: 'delete',
+			body: JSON.stringify({
+				path: 'salarie',
+				id: salarie.id
+			})
+		});
+		const res = await deleteFetch.json();
+
+		if (res.data.status === 200) {
+			removeSalarie();
+		} else {
+			alert(res.data.message);
+		}
+	};
 </script>
 
 <Row>
@@ -15,26 +35,11 @@
 	<Cell>{salarie.email}</Cell>
 	<Cell>{salarie.service.nom}</Cell>
 	<Cell>{salarie.site.nom}</Cell>
+	<Cell>{salarie.site.ville}</Cell>
+	{#if authed}
+		<Cell>
+			<Button variant="text" onclick={deleteElement}>Supprimer</Button>
+			<Button variant="unelevated">Modifier</Button>
+		</Cell>
+	{/if}
 </Row>
-
-<style lang="scss">
-	@use '$lib/style/main';
-
-	:global(.mdc-card) {
-		@include main.flex($direction: row);
-		width: 90%;
-
-		.smui-card__content {
-			width: 100%;
-
-			h2 {
-				margin-bottom: main.$margin-m;
-				text-decoration: underline;
-			}
-			span,
-			div {
-				@include main.flex($direction: row);
-			}
-		}
-	}
-</style>
