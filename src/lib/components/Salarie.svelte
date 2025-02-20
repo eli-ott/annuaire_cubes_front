@@ -1,13 +1,18 @@
 <script lang="ts">
 	import type { Salarie } from '$lib/models/Salarie';
+	import type { Service } from '$lib/models/Service';
+	import type { Site } from '$lib/models/Site';
 	import { Cell, Row } from '@smui/data-table';
 	import Button from '@smui/button';
+	import { invalidateAll } from '$app/navigation';
+	import SalarieDialog from './SalarieDialog.svelte';
+	import SiteDialog from './SiteDialog.svelte';
 
 	let {
 		salarie = $bindable(),
 		authed = $bindable(),
-		removeSalarie
-	}: { salarie: Salarie; authed: boolean; removeSalarie: any } = $props();
+		handleModify
+	}: { salarie: Salarie; authed: boolean; handleModify: any } = $props();
 
 	const deleteElement = async () => {
 		const deleteFetch = await fetch('/api', {
@@ -20,7 +25,7 @@
 		const res = await deleteFetch.json();
 
 		if (res.data.status === 200) {
-			removeSalarie();
+			invalidateAll();
 		} else {
 			alert(res.data.message);
 		}
@@ -39,7 +44,7 @@
 	{#if authed}
 		<Cell>
 			<Button variant="text" onclick={deleteElement}>Supprimer</Button>
-			<Button variant="unelevated">Modifier</Button>
+			<Button variant="unelevated" onclick={handleModify}>Modifier</Button>
 		</Cell>
 	{/if}
 </Row>

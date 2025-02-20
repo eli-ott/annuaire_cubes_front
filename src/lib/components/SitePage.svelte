@@ -3,18 +3,18 @@
 	import DataTable, { Body, Cell, Head, Row } from '@smui/data-table';
 	import type { PageProps } from '../../routes/$types';
 	import Site from './Site.svelte';
-	import type { Site as SiteType } from '$lib/models/Site';
+	import SiteDialog from './SiteDialog.svelte';
 
 	let { data }: PageProps = $props();
-	let sites = $state(data.sites);
-
-	const removeSite = (idSite: number) => {
-		sites = sites.filter((site: SiteType) => site.id !== idSite);
-	};
+	let dialogOpen = $state(false);
 </script>
 
+<SiteDialog dialogClose={() => (dialogOpen = false)} open={dialogOpen} site={undefined}
+></SiteDialog>
 <section class="list-container">
-	<Button variant="raised">Ajouter un site</Button>
+	{#if data.authed}
+		<Button variant="raised" onclick={() => (dialogOpen = true)}>Ajouter un site</Button>
+	{/if}
 	<div class="sites-container">
 		<DataTable table$aria-label="Sites">
 			<Head>
@@ -28,8 +28,8 @@
 				</Row>
 			</Head>
 			<Body>
-				{#each sites as site}
-					<Site {site} authed={data.authed} removeSite={() => removeSite(site.id)} />
+				{#each data.sites as site}
+					<Site {site} authed={data.authed} />
 				{/each}
 			</Body>
 		</DataTable>

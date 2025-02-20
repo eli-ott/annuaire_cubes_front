@@ -1,13 +1,14 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
 	import type { Service } from '$lib/models/Service';
 	import Button from '@smui/button';
 	import DataTable, { Body, Cell, Head, Row } from '@smui/data-table';
+	import ServiceDialog from './ServiceDialog.svelte';
 
-	let {
-		service = $bindable(),
-		authed = $bindable(),
-		removeService
-	}: { service: Service; authed: boolean; removeService: any } = $props();
+	let { service = $bindable(), authed = $bindable() }: { service: Service; authed: boolean } =
+		$props();
+	let dialogOpen = $state(false);
+	let selectedService: Service | undefined = $state();
 
 	const deleteElement = async () => {
 		const deleteFetch = await fetch('/api', {
@@ -21,20 +22,27 @@
 		const res = await deleteFetch.json();
 
 		if (res.data.status === 200) {
-			removeService();
+			invalidateAll();
 		} else {
 			alert(res.data.message);
 		}
 	};
+
+	const handleModify = () => {
+		selectedService = service;
+		dialogOpen = true;
+	};
 </script>
 
+<ServiceDialog open={dialogOpen} service={selectedService} dialogClose={() => (dialogOpen = false)}
+></ServiceDialog>
 <Row>
 	<Cell>{service.id}</Cell>
 	<Cell>{service.nom}</Cell>
 	{#if authed}
 		<Cell>
 			<Button variant="text" onclick={deleteElement}>Supprimer</Button>
-			<Button variant="unelevated">Modifier</Button>
+			<Button variant="unelevated" onclick={handleModify}>Modifier</Button>
 		</Cell>
 	{/if}
 </Row>

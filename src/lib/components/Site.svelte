@@ -1,13 +1,13 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
 	import type { Site } from '$lib/models/Site';
 	import Button from '@smui/button';
 	import DataTable, { Body, Cell, Head, Row } from '@smui/data-table';
+	import SiteDialog from './SiteDialog.svelte';
 
-	let {
-		site = $bindable(),
-		authed = $bindable(),
-		removeSite
-	}: { site: Site; authed: boolean; removeSite: any } = $props();
+	let { site = $bindable(), authed = $bindable() }: { site: Site; authed: boolean } = $props();
+	let dialogOpen = $state(false);
+	let selectedSite: Site | undefined = $state();
 
 	const deleteElement = async () => {
 		const deleteFetch = await fetch('/api', {
@@ -21,13 +21,20 @@
 		const res = await deleteFetch.json();
 
 		if (res.data.status === 200) {
-			removeSite();
+			invalidateAll();
 		} else {
 			alert(res.data.message);
 		}
 	};
+
+	const handleModify = () => {
+		selectedSite = site;
+		dialogOpen = true;
+	};
 </script>
 
+<SiteDialog dialogClose={() => (dialogOpen = false)} open={dialogOpen} site={selectedSite}
+></SiteDialog>
 <Row>
 	<Cell>{site.id}</Cell>
 	<Cell>{site.nom}</Cell>
@@ -35,7 +42,7 @@
 	{#if authed}
 		<Cell>
 			<Button variant="text" onclick={deleteElement}>Supprimer</Button>
-			<Button variant="unelevated">Modifier</Button>
+			<Button variant="unelevated" onclick={handleModify}>Modifier</Button>
 		</Cell>
 	{/if}
 </Row>

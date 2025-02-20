@@ -4,17 +4,18 @@
 	import type { PageProps } from '../../routes/$types';
 	import Service from './Service.svelte';
 	import type { Service as ServiceType } from '$lib/models/Service';
+	import ServiceDialog from './ServiceDialog.svelte';
 
 	let { data }: PageProps = $props();
-	let services = $state(data.services);
-
-	const removeService = (idService: number) => {
-		services = services.filter((service: ServiceType) => service.id !== idService);
-	};
+	let dialogOpen = $state(false);
 </script>
 
+<ServiceDialog open={dialogOpen} service={undefined} dialogClose={() => (dialogOpen = false)}
+></ServiceDialog>
 <section class="list-container">
-	<Button variant="raised">Ajouter un service</Button>
+	{#if data.authed}
+		<Button variant="raised" onclick={() => (dialogOpen = true)}>Ajouter un service</Button>
+	{/if}
 	<div class="services-container">
 		<DataTable table$aria-label="Services">
 			<Head>
@@ -27,14 +28,8 @@
 				</Row>
 			</Head>
 			<Body>
-				{#each services as service}
-					<Service
-						{service}
-						authed={data.authed}
-						removeService={() => {
-							removeService(service.id);
-						}}
-					/>
+				{#each data.services as service}
+					<Service {service} authed={data.authed} />
 				{/each}
 			</Body>
 		</DataTable>

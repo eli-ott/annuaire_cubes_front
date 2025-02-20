@@ -3,6 +3,10 @@ import type { Site } from './Site';
 
 /** L'interface pour un salarie */
 export interface Salarie {
+	/** L'id admin si c'est un admin */
+	idAdmin?: number;
+	/** L'id user si c'est un admin */
+	idUser?: number;
 	/** L'id */
 	id: number;
 	/** Son nom */

@@ -1,39 +1,40 @@
 <script lang="ts">
-	import { Salarie } from '$lib/components/index';
+	import Admin from '$lib/components/Admin.svelte';
 	import DataTable, { Body, Cell, Head, Row } from '@smui/data-table';
 	import type { PageProps } from '../../routes/$types';
 	import Button from '@smui/button';
 	import SalarieDialog from './SalarieDialog.svelte';
-	import type { Salarie as SalarieType } from '$lib/models/Salarie';
+	import type { Salarie, Salarie as SalarieType } from '$lib/models/Salarie';
+	import { onMount } from 'svelte';
+	import AdminDialog from './AdminDialog.svelte';
 
 	let { data }: PageProps = $props();
 	let dialogOpen = $state(false);
-	let selectedSalarie: SalarieType | undefined = $state();
+	let admins: Salarie[] = $state([]);
 
-	const handleNew = () => {
-		selectedSalarie = undefined;
-		dialogOpen = true;
-	};
+	onMount(() => {
+		getData();
+	});
 
-	const handleModify = (salarie: SalarieType) => {
-		selectedSalarie = salarie;
-		dialogOpen = true;
+	const getData = async () => {
+		admins = [];
+
+		const getFetch = await fetch('/api', {
+			method: 'GET'
+		});
+		const res = await getFetch.json();
+
+		admins = res.data.data;
 	};
 </script>
 
-<SalarieDialog
-	open={dialogOpen}
-	salarie={selectedSalarie}
-	servicesList={data.services}
-	sitesList={data.sites}
-	dialogClose={() => (dialogOpen = false)}
-></SalarieDialog>
+<AdminDialog open={dialogOpen} salaries={data.salaries} dialogClose={() => dialogOpen = false} update={getData}></AdminDialog>
 <section class="list-container">
 	{#if data.authed}
-		<Button variant="raised" onclick={handleNew}>Ajouter un salarie</Button>
+		<Button variant="raised" onclick={() => (dialogOpen = true)}>Ajouter un admin</Button>
 	{/if}
-	<div class="salaries-container">
-		<DataTable table$aria-label="Salaries">
+	<div class="admins-container">
+		<DataTable table$aria-label="Admins">
 			<Head>
 				<Row>
 					<Cell>Nom</Cell>
@@ -50,14 +51,8 @@
 				</Row>
 			</Head>
 			<Body>
-				{#each data.salaries as salarie}
-					<Salarie
-						{salarie}
-						authed={data.authed}
-						handleModify={() => {
-							handleModify(salarie);
-						}}
-					/>
+				{#each admins as admin}
+					<Admin {admin} authed={data.authed} update={getData} />
 				{/each}
 			</Body>
 		</DataTable>
@@ -75,7 +70,7 @@
 		.filter-container {
 			width: 95%;
 		}
-		.salaries-container {
+		.admins-container {
 			@include main.flex();
 
 			width: 100%;
