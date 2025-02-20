@@ -17,8 +17,24 @@
 		if (data.authed) tabs = ['Salaries', 'Services', 'Sites', 'Admin'];
 		else tabs = ['Salaries', 'Services', 'Sites'];
 	});
+
+	const sequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowLeft'];
+	let currentIndex = 0;
+
+	const handleSequence = (event: KeyboardEvent) => {
+		if (event.key === sequence[currentIndex]) {
+			currentIndex++;
+			if (currentIndex === sequence.length) {
+				console.log('Key combination activated!');
+				currentIndex = 0;
+			}
+		} else {
+			currentIndex = 0;
+		}
+	};
 </script>
 
+<svelte:window onkeydown={handleSequence}></svelte:window>
 <main>
 	<div class="title">
 		<h1>Annuaire interne</h1>
