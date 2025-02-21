@@ -25,7 +25,7 @@
 
 		let verifyObject = verifyObjectFields(data, requiredFields);
 		if (!verifyObject.isValid) {
-			alert('Il manque le ' + verifyObject.missingFields.join(', '));
+			alert('Il manque le(s) ' + verifyObject.missingFields.join(', '));
 			return;
 		}
 
