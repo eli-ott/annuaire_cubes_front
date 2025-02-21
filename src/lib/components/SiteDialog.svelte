@@ -32,41 +32,26 @@
 			return;
 		}
 
-		if (site) {
-			const modifyFetch = await fetch('/api', {
-				method: 'put',
-				body: JSON.stringify({
-					path: 'site',
-					data: {
-						id: site.id,
-						...data
-					}
-				})
+		const method = site ? 'put' : 'post';
+		const requestData = site
+			? { path: 'site', data: { id: site.id, ...data } }
+			: { path: 'site', data };
+
+		try {
+			const response = await fetch('/api', {
+				method,
+				body: JSON.stringify(requestData)
 			});
 
-			const res = await modifyFetch.json();
+			const res = await response.json();
 
 			if (res.data.status === 200) {
 				invalidateAll();
 			} else {
 				alert(res.data.message);
 			}
-		} else {
-			const modifyFetch = await fetch('/api', {
-				method: 'post',
-				body: JSON.stringify({
-					path: 'site',
-					data
-				})
-			});
-
-			const res = await modifyFetch.json();
-
-			if (res.data.status === 200) {
-				invalidateAll();
-			} else {
-				alert(res.data.message);
-			}
+		} catch (error) {
+			console.error('Error modifying site:', error);
 		}
 	};
 </script>

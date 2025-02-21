@@ -3,7 +3,6 @@
 	import DataTable, { Body, Cell, Head, Row } from '@smui/data-table';
 	import type { PageProps } from '../../routes/$types';
 	import Service from './Service.svelte';
-	import type { Service as ServiceType } from '$lib/models/Service';
 	import ServiceDialog from './ServiceDialog.svelte';
 
 	let { data }: PageProps = $props();

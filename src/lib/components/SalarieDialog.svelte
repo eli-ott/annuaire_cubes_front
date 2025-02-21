@@ -59,41 +59,26 @@
 			return;
 		}
 
-		if (salarie) {
-			const modifyFetch = await fetch('/api', {
-				method: 'put',
-				body: JSON.stringify({
-					path: 'salarie',
-					data: {
-						id: salarie.id,
-						...data
-					}
-				})
+		const method = salarie ? 'put' : 'post';
+		const requestData = salarie
+			? { path: 'salarie', data: { id: salarie.id, ...data } }
+			: { path: 'salarie', data };
+
+		try {
+			const response = await fetch('/api', {
+				method,
+				body: JSON.stringify(requestData)
 			});
 
-			const res = await modifyFetch.json();
+			const res = await response.json();
 
 			if (res.data.status === 200) {
 				invalidateAll();
 			} else {
 				alert(res.data.message);
 			}
-		} else {
-			const modifyFetch = await fetch('/api', {
-				method: 'post',
-				body: JSON.stringify({
-					path: 'salarie',
-					data
-				})
-			});
-
-			const res = await modifyFetch.json();
-
-			if (res.data.status === 200) {
-				invalidateAll();
-			} else {
-				alert(res.data.message);
-			}
+		} catch (error) {
+			console.error('Error modifying salarie:', error);
 		}
 	};
 </script>

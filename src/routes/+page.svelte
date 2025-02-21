@@ -80,6 +80,10 @@
 		width: 100%;
 		padding: main.$margin-m;
 
+		.title {
+			padding: main.$margin-m 0;
+		}
+
 		.tab-container {
 			@include main.flex($direction: column, $gap: main.$margin-m);
 
