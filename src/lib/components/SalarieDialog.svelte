@@ -7,6 +7,7 @@
 	import type { Service } from '$lib/models/Service';
 	import type { Site } from '$lib/models/Site';
 	import Select, { Option } from '@smui/select';
+	import { verifyObjectFields } from '$lib/Utils/sharedUtils';
 
 	let {
 		salarie = undefined,
@@ -41,6 +42,23 @@
 	});
 
 	const doAction = async () => {
+		var requiredFields = ['nom', 'prenom', 'telFixe', 'telPortable', 'email', 'service', 'site'];
+		let data = {
+			nom,
+			prenom,
+			telFixe,
+			telPortable,
+			email,
+			service: servicesList.find((s) => s.id === service),
+			site: sitesList.find((s) => s.id === site)
+		};
+
+		let verifyObject = verifyObjectFields(data, requiredFields);
+		if (!verifyObject.isValid) {
+			alert('Il manque le ' + verifyObject.missingFields.join(', '));
+			return;
+		}
+
 		if (salarie) {
 			const modifyFetch = await fetch('/api', {
 				method: 'put',
@@ -48,13 +66,7 @@
 					path: 'salarie',
 					data: {
 						id: salarie.id,
-						nom,
-						prenom,
-						telFixe,
-						telPortable,
-						email,
-						service: servicesList.find((s) => s.id === service),
-						site: sitesList.find((s) => s.id === site)
+						...data
 					}
 				})
 			});
@@ -71,15 +83,7 @@
 				method: 'post',
 				body: JSON.stringify({
 					path: 'salarie',
-					data: {
-						nom,
-						prenom,
-						telFixe,
-						telPortable,
-						email,
-						service: servicesList.find((s) => s.id === service),
-						site: sitesList.find((s) => s.id === site)
-					}
+					data
 				})
 			});
 

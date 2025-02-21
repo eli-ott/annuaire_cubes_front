@@ -4,6 +4,7 @@
 	import Textfield from '@smui/textfield';
 	import type { Site } from '$lib/models/Site';
 	import { invalidateAll } from '$app/navigation';
+	import { verifyObjectFields } from '$lib/Utils/sharedUtils';
 
 	let {
 		site = undefined,
@@ -19,6 +20,18 @@
 	});
 
 	const doAction = async () => {
+		var requiredFields = ['nom', 'ville'];
+		let data = {
+			nom,
+			ville
+		};
+
+		let verifyObject = verifyObjectFields(data, requiredFields);
+		if (!verifyObject.isValid) {
+			alert('Il manque le ' + verifyObject.missingFields.join(', '));
+			return;
+		}
+
 		if (site) {
 			const modifyFetch = await fetch('/api', {
 				method: 'put',
@@ -26,8 +39,7 @@
 					path: 'site',
 					data: {
 						id: site.id,
-						nom,
-						ville
+						...data
 					}
 				})
 			});
@@ -44,15 +56,11 @@
 				method: 'post',
 				body: JSON.stringify({
 					path: 'site',
-					data: {
-						nom,
-						ville
-					}
+					data
 				})
 			});
 
 			const res = await modifyFetch.json();
-			console.log(res);
 
 			if (res.data.status === 200) {
 				invalidateAll();

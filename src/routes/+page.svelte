@@ -1,17 +1,19 @@
 <script lang="ts">
 	import AdminPage from '$lib/components/AdminPage.svelte';
-	import { Salarie, SalariePage, ServicePage } from '$lib/components/index';
+	import AuthDialog from '$lib/components/AuthDialog.svelte';
+	import { SalariePage, ServicePage } from '$lib/components/index';
 	import SitePage from '$lib/components/SitePage.svelte';
 	import type { Salarie as SalarieType } from '$lib/models/Salarie.js';
 	import type { PageProps } from './$types.js';
 	import Tab, { Label } from '@smui/tab';
 	import TabBar from '@smui/tab-bar';
-	import { onMount } from 'svelte';
 
 	let { data }: PageProps = $props();
 	let salaries: SalarieType[] = $state(data.salaries);
 	let activePage = $state('Salaries');
 	let tabs: string[] = $state([]);
+	
+	let dialogOpen = $state(false);
 
 	$effect(() => {
 		if (data.authed) tabs = ['Salaries', 'Services', 'Sites', 'Admin'];
@@ -25,7 +27,7 @@
 		if (event.key === sequence[currentIndex]) {
 			currentIndex++;
 			if (currentIndex === sequence.length) {
-				console.log('Key combination activated!');
+				dialogOpen = true;
 				currentIndex = 0;
 			}
 		} else {
@@ -35,6 +37,7 @@
 </script>
 
 <svelte:window onkeydown={handleSequence}></svelte:window>
+<AuthDialog open={dialogOpen} dialogClose={() => dialogOpen = false}></AuthDialog>
 <main>
 	<div class="title">
 		<h1>Annuaire interne</h1>
@@ -44,7 +47,6 @@
 			Recherchez vos collègues ou interlocuteurs en fonction de leurs services, site, nom etc.
 		</p>
 	</div>
-
 	<div class="tab-container">
 		<TabBar {tabs} bind:active={activePage}>
 			{#snippet tab(tab)}
