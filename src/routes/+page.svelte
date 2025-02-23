@@ -4,6 +4,7 @@
 	import { SalariePage, ServicePage } from '$lib/components/index';
 	import SitePage from '$lib/components/SitePage.svelte';
 	import type { Salarie as SalarieType } from '$lib/models/Salarie.js';
+	import Button from '@smui/button';
 	import type { PageProps } from './$types.js';
 	import Tab, { Label } from '@smui/tab';
 	import TabBar from '@smui/tab-bar';
@@ -12,7 +13,7 @@
 	let salaries: SalarieType[] = $state(data.salaries);
 	let activePage = $state('Salaries');
 	let tabs: string[] = $state([]);
-	
+
 	let dialogOpen = $state(false);
 
 	$effect(() => {
@@ -20,7 +21,7 @@
 		else tabs = ['Salaries', 'Services', 'Sites'];
 	});
 
-	const sequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowLeft'];
+	const sequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'Enter'];
 	let currentIndex = 0;
 
 	const handleSequence = (event: KeyboardEvent) => {
@@ -34,18 +35,26 @@
 			currentIndex = 0;
 		}
 	};
+
+	const handleDisconnect = async () => {
+		const disconnectFetch = await fetch('/api/auth', {
+			method: 'DELETE'
+		});
+
+		if (disconnectFetch.status === 200) {
+			window.location.reload();
+		}
+	};
 </script>
 
-<svelte:window onkeydown={handleSequence}></svelte:window>
-<AuthDialog open={dialogOpen} dialogClose={() => dialogOpen = false}></AuthDialog>
+<svelte:window onkeydown={handleSequence} />
+<AuthDialog open={dialogOpen} dialogClose={() => (dialogOpen = false)}></AuthDialog>
 <main>
-	<div class="title">
+	<div class="header">
 		<h1>Annuaire interne</h1>
-		<p>
-			Dans cet annuaire retrouvez toutes les personnes qui travaille dans notre entreprise, peut
-			importe la localisation. <br /> <br />
-			Recherchez vos collègues ou interlocuteurs en fonction de leurs services, site, nom etc.
-		</p>
+		{#if data.authed}
+			<Button variant="unelevated" onclick={handleDisconnect}>Se déconnecter</Button>
+		{/if}
 	</div>
 	<div class="tab-container">
 		<TabBar {tabs} bind:active={activePage}>
@@ -75,13 +84,15 @@
 		width: 95%;
 	}
 	main {
-		@include main.flex($direction: column, $gap: calc(main.$margin-xl * 3));
+		@include main.flex($direction: column, $gap: main.$margin-m);
 
 		width: 100%;
 		padding: main.$margin-m;
 
-		.title {
-			padding: main.$margin-m 0;
+		.header {
+			@include main.flex($justify: space-between);
+
+			width: 100%;
 		}
 
 		.tab-container {

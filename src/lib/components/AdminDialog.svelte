@@ -6,16 +6,28 @@
 	import type { Salarie } from '$lib/models/Salarie';
 	import { invalidateAll } from '$app/navigation';
 	import Select, { Option } from '@smui/select';
+	import { verifyObjectFields } from '$lib/Utils/sharedUtils';
 
 	let {
 		open = false,
 		dialogClose,
 		salaries,
-        update
-	}: { open: boolean; dialogClose: any; salaries: Salarie[], update: any } = $props();
+		update
+	}: { open: boolean; dialogClose: any; salaries: Salarie[]; update: any } = $props();
 	let idUser: number | undefined = $state();
 
 	const doAction = async () => {
+		var requiredFields = ['idUser'];
+		let data = {
+			idUser
+		};
+
+		let verifyObject = verifyObjectFields(data, requiredFields);
+		if (!verifyObject.isValid) {
+			alert('Il manque le ' + verifyObject.missingFields.join(', '));
+			return;
+		}
+
 		const modifyFetch = await fetch('/api', {
 			method: 'post',
 			body: JSON.stringify({
@@ -36,7 +48,12 @@
 	};
 </script>
 
-<Dialog bind:open aria-labelledby="simple-title" aria-describedby="service-dialog">
+<Dialog
+	bind:open
+	aria-labelledby="simple-title"
+	aria-describedby="service-dialog"
+	onSMUIDialogClosed={dialogClose}
+>
 	<Title id="simple-title">Ajouter un admin</Title>
 	<Content id="service-dialog">
 		<Select bind:value={idUser} label="Select Menu" style="width: 100%">

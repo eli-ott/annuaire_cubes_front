@@ -25,7 +25,7 @@
 
 		let verifyObject = verifyObjectFields(data, requiredFields);
 		if (!verifyObject.isValid) {
-			alert('Il manque le(s) ' + verifyObject.missingFields.join(', '));
+			alert('Il manque le ' + verifyObject.missingFields.join(', '));
 			return;
 		}
 
@@ -53,7 +53,7 @@
 	};
 </script>
 
-<Dialog bind:open aria-labelledby="simple-title" aria-describedby="service-dialog">
+<Dialog bind:open aria-labelledby="simple-title" aria-describedby="service-dialog" onSMUIDialogClosed={dialogClose}>
 	<Title id="simple-title">{service ? 'Modifier' : 'Ajouter'} un service</Title>
 	<Content id="service-dialog">
 		<Textfield
