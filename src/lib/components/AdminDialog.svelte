@@ -40,10 +40,10 @@
 
 		const res = await modifyFetch.json();
 
-		if (res.data.status === 200) {
+		if (res.data.status === 200 || modifyFetch.ok) {
 			update();
 		} else {
-			alert(res.data.message);
+			alert(res.data.message || 'Une erreur est survenu');
 		}
 	};
 </script>

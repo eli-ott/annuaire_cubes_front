@@ -16,10 +16,10 @@
 		});
 		const res = await deleteFetch.json();
 
-		if (res.data.status === 200) {
+		if (res.data.status === 200 || deleteFetch.ok) {
 			update();
 		} else {
-			alert(res.data.message);
+			alert(res.data.message || 'Une erreur est survenu');
 		}
 	};
 </script>

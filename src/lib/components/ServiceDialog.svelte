@@ -42,10 +42,10 @@
 
 			const res = await response.json();
 
-			if (res.data.status === 200) {
+			if (res.data.status === 200 || response.ok) {
 				invalidateAll();
 			} else {
-				alert(res.data.message);
+				alert(res.data.message || 'Une erreur est survenu');
 			}
 		} catch (error) {
 			console.error('Error modifying service:', error);

@@ -11,7 +11,7 @@
 	let password: string | undefined = $state();
 
 	const doAction = async () => {
-			const modifyFetch = await fetch('/api/auth', {
+			const authFetch = await fetch('/api/auth', {
 				method: 'post',
 				body: JSON.stringify({
 					path: 'site',
@@ -22,9 +22,9 @@
 				})
 			});
 
-			const res = await modifyFetch.json();
+			const res = await authFetch.json();
 
-			if (res.data.status === 200) {
+			if (res.data.status === 200 || authFetch.ok) {
                 // Refresh de la page pour activer les droits correctement
 				window.location.reload();
 			} else {

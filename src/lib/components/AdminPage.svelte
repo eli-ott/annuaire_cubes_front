@@ -24,7 +24,11 @@
 		});
 		const res = await getFetch.json();
 
-		admins = res.data.data;
+		if(res.data.status === 200 || getFetch.ok) {
+			admins = res.data.data;
+		} else {
+			alert(res.data.message || 'Une erreur est survenu');
+		}
 	};
 </script>
 
