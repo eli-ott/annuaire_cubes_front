@@ -1,7 +1,16 @@
 import { FIELDS_LABEL } from './fieldsConstant';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function verifyObjectFields(obj: any, requiredFields: string[]) {
+/**
+ * Verify the fields of an object
+ *
+ * @param {{ [key: string]: string }} obj The object in which to verify the fields
+ * @param {string[]} requiredFields The required fields
+ * @returns {{isValid: boolean, missingFields: string[]}} The data of the verification
+ */
+export function verifyObjectFields(
+	obj: { [key: string]: string },
+	requiredFields: string[]
+): { isValid: boolean; missingFields: string[] } {
 	if (typeof obj !== 'object' || obj === null) {
 		throw new Error('Invalid object provided');
 	}

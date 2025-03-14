@@ -10,6 +10,9 @@
 	let dialogOpen = $state(false);
 	let selectedService: Service | undefined = $state();
 
+	/**
+	 * Delete a service
+	 */
 	const deleteElement = async () => {
 		const deleteFetch = await fetch('/api', {
 			method: 'delete',
@@ -28,6 +31,9 @@
 		invalidateAll();
 	};
 
+	/**
+	 * Handle the modification of a service
+	 */
 	const handleModify = () => {
 		selectedService = service;
 		dialogOpen = true;

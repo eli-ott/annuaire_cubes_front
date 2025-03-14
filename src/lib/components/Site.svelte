@@ -9,6 +9,9 @@
 	let dialogOpen = $state(false);
 	let selectedSite: Site | undefined = $state();
 
+	/**
+	 * Delete a site
+	*/
 	const deleteElement = async () => {
 		const deleteFetch = await fetch('/api', {
 			method: 'delete',
@@ -27,6 +30,9 @@
 		invalidateAll();
 	};
 
+	/**
+	 * Handle the modification of a site
+	 */
 	const handleModify = () => {
 		selectedSite = site;
 		dialogOpen = true;

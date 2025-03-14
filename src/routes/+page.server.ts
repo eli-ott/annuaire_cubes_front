@@ -1,6 +1,11 @@
 import { API_KEY, API_URL } from '$env/static/private';
 import type { PageServerLoad } from './$types';
 
+/**
+ * Load the elements
+ *
+ * @returns
+ */
 export const load: PageServerLoad = async ({ cookies }) => {
 	const services = await fetch(API_URL + 'service', {
 		headers: {

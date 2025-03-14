@@ -23,14 +23,26 @@
 		dialogClose: any;
 	} = $props();
 
+	/** The salarie first name */
 	let nom: string | undefined = $state(salarie?.nom);
+	/** The salarie last name */
 	let prenom: string | undefined = $state(salarie?.prenom);
+	/** The salarie fixed phone line */
 	let telFixe: string | undefined = $state(salarie?.telFixe);
+	/** The salarie mobile phone */
 	let telPortable: string | undefined = $state(salarie?.telPortable);
+	/** The salarie email */
 	let email: string | undefined = $state(salarie?.email);
+	/** The salarie service */
 	let service: number | undefined = $state(salarie?.service.id);
+	/** The salarie site */
 	let site: number | undefined = $state(salarie?.site.id);
 
+	/**
+	 * Effect
+	 *
+	 * Updates the fields of the salaries when they are modified
+	 */
 	$effect(() => {
 		nom = salarie?.nom;
 		prenom = salarie?.prenom;
@@ -41,6 +53,10 @@
 		site = salarie?.site.id;
 	});
 
+	/**
+	 * Execute an action
+	 * Either modify of add
+	 */
 	const doAction = async () => {
 		var requiredFields = ['nom', 'prenom', 'telFixe', 'telPortable', 'email', 'service', 'site'];
 		let data = {

@@ -15,6 +15,9 @@
 	let searchedService: number | undefined = $state(-1);
 	let search: string | undefined = $state();
 
+	/**
+	 * Manage the search in all the salaries
+	 */
 	const handleSearch = () => {
 		filteredSalaries = [];
 
@@ -45,11 +48,19 @@
 	};
 	handleSearch();
 
+	/**
+	 * Handle a salarie creation
+	 */
 	const handleNew = () => {
 		selectedSalarie = undefined;
 		dialogOpen = true;
 	};
 
+	/**
+	 * Handle a salarie update
+	 *
+	 * @param {SalarieType} salarie The salarie to update
+	 */
 	const handleModify = (salarie: SalarieType) => {
 		selectedSalarie = salarie;
 		dialogOpen = true;
@@ -63,6 +74,7 @@
 	sitesList={data.sites}
 	dialogClose={() => (dialogOpen = false)}
 ></SalarieDialog>
+
 <section class="list-container">
 	{#if data.authed}
 		<Button variant="raised" onclick={handleNew}>Ajouter un salarie</Button>

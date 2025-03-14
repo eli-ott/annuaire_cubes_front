@@ -1,6 +1,11 @@
 import { API_KEY, API_URL } from '$env/static/private';
 import { json } from '@sveltejs/kit';
 
+/**
+ * Get endpoint to request all the admins
+ *
+ * @returns
+ */
 export async function GET({ cookies }) {
 	try {
 		const postFetch = await fetch(API_URL + 'admin', {
@@ -28,6 +33,11 @@ export async function GET({ cookies }) {
 	}
 }
 
+/**
+ * Post endpoint to add an element
+ *
+ * @returns
+ */
 export async function POST({ cookies, request }) {
 	const body = await request.json();
 
@@ -59,6 +69,11 @@ export async function POST({ cookies, request }) {
 	}
 }
 
+/**
+ * Put endpoint to modify an element
+ *
+ * @returns
+ */
 export async function PUT({ cookies, request }) {
 	const body = await request.json();
 
@@ -90,6 +105,11 @@ export async function PUT({ cookies, request }) {
 	}
 }
 
+/**
+ * Delete endpoint to delete an element
+ *
+ * @returns
+ */
 export async function DELETE({ cookies, request }) {
 	const body = await request.json();
 

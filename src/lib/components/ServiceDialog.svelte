@@ -13,10 +13,18 @@
 	}: { service: Service | undefined; open: boolean; dialogClose: any } = $props();
 	let nom: string | undefined = $state(service?.nom);
 
+	/**
+	 * Effect
+	 * Modify the fields when they are modified
+	 */
 	$effect(() => {
 		nom = service?.nom;
 	});
 
+	/**
+	 * Execute an action
+	 * Either update or add a service
+	 */
 	const doAction = async () => {
 		var requiredFields = ['nom'];
 		let data = {

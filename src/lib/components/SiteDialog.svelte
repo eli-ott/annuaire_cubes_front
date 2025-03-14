@@ -14,11 +14,19 @@
 	let nom: string | undefined = $state(site?.nom);
 	let ville: string | undefined = $state(site?.ville);
 
+	/**
+	 * Effect
+	 * Modify the fields when they change
+	 */
 	$effect(() => {
 		nom = site?.nom;
 		ville = site?.ville;
 	});
 
+	/**
+	 * Execute an action
+	 * Either update or add a site
+	 */
 	const doAction = async () => {
 		var requiredFields = ['nom', 'ville'];
 		let data = {

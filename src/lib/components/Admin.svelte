@@ -9,6 +9,9 @@
 		update
 	}: { admin: Salarie; authed: boolean; update: any } = $props();
 
+	/**
+	 * Handle the deletion of an admin
+	 */
 	const deleteElement = async () => {
 		const deleteFetch = await fetch('/api', {
 			method: 'delete',

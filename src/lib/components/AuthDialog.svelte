@@ -7,7 +7,10 @@
 	let telPortable: string | undefined = $state();
 	let password: string | undefined = $state();
 
-	const doAction = async () => {
+	/**
+	 * Execute a login
+	 */
+	const logUser = async () => {
 		const authFetch = await fetch('/api/auth', {
 			method: 'post',
 			body: JSON.stringify({
@@ -54,7 +57,7 @@
 		></Textfield>
 	</Content>
 	<Actions>
-		<Button onclick={doAction}>
+		<Button onclick={logUser}>
 			<Label>Valider</Label>
 		</Button>
 	</Actions>

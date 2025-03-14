@@ -12,10 +12,16 @@
 	let dialogOpen = $state(false);
 	let admins: Salarie[] = $state([]);
 
+	/**
+	 * On mount
+	 */
 	onMount(() => {
 		getData();
 	});
 
+	/**
+	 * Get the admins
+	 */
 	const getData = async () => {
 		admins = [];
 

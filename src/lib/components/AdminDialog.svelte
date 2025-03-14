@@ -13,7 +13,10 @@
 	}: { open: boolean; dialogClose: any; salaries: Salarie[]; update: any } = $props();
 	let idUser: number | undefined = $state();
 
-	const doAction = async () => {
+	/**
+	 * Add an admin
+	 */
+	const addAdmin = async () => {
 		var requiredFields = ['idUser'];
 		let data = {
 			idUser
@@ -60,7 +63,7 @@
 		</Select>
 	</Content>
 	<Actions>
-		<Button onclick={doAction}>
+		<Button onclick={addAdmin}>
 			<Label>Ajouter</Label>
 		</Button>
 	</Actions>

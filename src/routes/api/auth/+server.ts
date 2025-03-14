@@ -1,6 +1,11 @@
 import { API_KEY, API_URL } from '$env/static/private';
 import { json } from '@sveltejs/kit';
 
+/**
+ * Post endpoint to login 
+ * @param param0 
+ * @returns 
+ */
 export async function POST({ cookies, request }) {
 	const body = await request.json();
 

@@ -10,6 +10,9 @@
 		handleModify
 	}: { salarie: Salarie; authed: boolean; handleModify: any } = $props();
 
+	/**
+	 * Delete a salarie
+	 */
 	const deleteElement = async () => {
 		const deleteFetch = await fetch('/api', {
 			method: 'delete',
