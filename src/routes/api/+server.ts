@@ -20,6 +20,7 @@ export async function GET({ cookies }) {
 			cookies.delete('token', {
 				path: '/'
 			});
+			document.location.reload();
 			return json({ data: { message: "Vous n'êtes pas connecté" } }, { status: 401 });
 		}
 
@@ -56,6 +57,7 @@ export async function POST({ cookies, request }) {
 			cookies.delete('token', {
 				path: '/'
 			});
+			document.location.reload();
 			return json({ data: { message: "Vous n'êtes pas connecté" } }, { status: 401 });
 		}
 
@@ -92,6 +94,7 @@ export async function PUT({ cookies, request }) {
 			cookies.delete('token', {
 				path: '/'
 			});
+			document.location.reload();
 			return json({ data: { message: "Vous n'êtes pas connecté" } }, { status: 401 });
 		}
 
@@ -126,6 +129,7 @@ export async function DELETE({ cookies, request }) {
 			cookies.delete('token', {
 				path: '/'
 			});
+			document.location.reload();
 			return json({ data: { message: "Vous n'êtes pas connecté" } }, { status: 401 });
 		}
 

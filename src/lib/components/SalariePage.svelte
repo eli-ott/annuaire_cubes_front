@@ -72,7 +72,10 @@
 	salarie={selectedSalarie}
 	servicesList={data.services}
 	sitesList={data.sites}
-	dialogClose={() => (dialogOpen = false)}
+	dialogClose={() => {
+		handleSearch();
+		dialogOpen = false;
+	}}
 ></SalarieDialog>
 
 <section class="list-container">
