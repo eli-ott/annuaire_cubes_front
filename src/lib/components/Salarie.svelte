@@ -1,12 +1,8 @@
 <script lang="ts">
 	import type { Salarie } from '$lib/models/Salarie';
-	import type { Service } from '$lib/models/Service';
-	import type { Site } from '$lib/models/Site';
 	import { Cell, Row } from '@smui/data-table';
 	import Button from '@smui/button';
 	import { invalidateAll } from '$app/navigation';
-	import SalarieDialog from './SalarieDialog.svelte';
-	import SiteDialog from './SiteDialog.svelte';
 
 	let {
 		salarie = $bindable(),
@@ -24,11 +20,12 @@
 		});
 		const res = await deleteFetch.json();
 
-		if (res.data.status === 200 || deleteFetch.ok) {
-			invalidateAll();
-		} else {
-			alert(res.data.message || 'Une erreur est survenu');
+		if (!deleteFetch.ok || res.data.status !== 200) {
+			alert(res.data.message ?? 'Une erreur est survenue');
+			return;
 		}
+
+		invalidateAll();
 	};
 </script>
 

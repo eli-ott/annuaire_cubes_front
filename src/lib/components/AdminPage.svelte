@@ -24,15 +24,21 @@
 		});
 		const res = await getFetch.json();
 
-		if(res.data.status === 200 || getFetch.ok) {
-			admins = res.data.data;
-		} else {
-			alert(res.data.message || 'Une erreur est survenu');
+		if (!getFetch.ok || res.data.status !== 200) {
+			alert(res.data.message ?? 'Une erreur est survenue');
+			return;
 		}
+
+		admins = res.data.data;
 	};
 </script>
 
-<AdminDialog open={dialogOpen} salaries={data.salaries} dialogClose={() => dialogOpen = false} update={getData}></AdminDialog>
+<AdminDialog
+	open={dialogOpen}
+	salaries={data.salaries}
+	dialogClose={() => (dialogOpen = false)}
+	update={getData}
+></AdminDialog>
 <section class="list-container">
 	{#if data.authed}
 		<Button variant="raised" onclick={() => (dialogOpen = true)}>Ajouter un admin</Button>

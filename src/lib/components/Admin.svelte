@@ -2,9 +2,12 @@
 	import type { Salarie } from '$lib/models/Salarie';
 	import { Cell, Row } from '@smui/data-table';
 	import Button from '@smui/button';
-	import { invalidateAll } from '$app/navigation';
 
-	let { admin = $bindable(), authed = $bindable(), update }: { admin: Salarie; authed: boolean, update: any } = $props();
+	let {
+		admin = $bindable(),
+		authed = $bindable(),
+		update
+	}: { admin: Salarie; authed: boolean; update: any } = $props();
 
 	const deleteElement = async () => {
 		const deleteFetch = await fetch('/api', {
@@ -16,11 +19,12 @@
 		});
 		const res = await deleteFetch.json();
 
-		if (res.data.status === 200 || deleteFetch.ok) {
-			update();
-		} else {
-			alert(res.data.message || 'Une erreur est survenu');
+		if (!deleteFetch.ok || res.data.status !== 200) {
+			alert(res.data.message ?? 'Une erreur est survenue');
+			return;
 		}
+
+		update();
 	};
 </script>
 

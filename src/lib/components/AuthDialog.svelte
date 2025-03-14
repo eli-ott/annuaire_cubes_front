@@ -3,33 +3,30 @@
 	import Button, { Label } from '@smui/button';
 	import Textfield from '@smui/textfield';
 
-	let {
-		open = false,
-		dialogClose
-	}: { open: boolean; dialogClose: any } = $props();
+	let { open = false, dialogClose }: { open: boolean; dialogClose: any } = $props();
 	let telPortable: string | undefined = $state();
 	let password: string | undefined = $state();
 
 	const doAction = async () => {
-			const authFetch = await fetch('/api/auth', {
-				method: 'post',
-				body: JSON.stringify({
-					path: 'site',
-					data: {
-						telPortable,
-						password
-					}
-				})
-			});
+		const authFetch = await fetch('/api/auth', {
+			method: 'post',
+			body: JSON.stringify({
+				path: 'site',
+				data: {
+					telPortable,
+					password
+				}
+			})
+		});
+		const res = await authFetch.json();
 
-			const res = await authFetch.json();
+		if (!authFetch.ok || res.data.status !== 200) {
+			alert(res.data.message ?? 'Une erreur est survenue');
+			return;
+		}
 
-			if (res.data.status === 200 || authFetch.ok) {
-                // Refresh de la page pour activer les droits correctement
-				window.location.reload();
-			} else {
-				alert(res.data.message);
-			}
+		// Refresh de la page pour activer les droits correctement
+		window.location.reload();
 	};
 </script>
 

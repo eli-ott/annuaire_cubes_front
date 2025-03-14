@@ -5,10 +5,45 @@
 	import Button from '@smui/button';
 	import SalarieDialog from './SalarieDialog.svelte';
 	import type { Salarie as SalarieType } from '$lib/models/Salarie';
+	import Searchbar from './Searchbar.svelte';
 
 	let { data }: PageProps = $props();
 	let dialogOpen = $state(false);
 	let selectedSalarie: SalarieType | undefined = $state();
+	let filteredSalaries: SalarieType[] = $state([]);
+	let searchedSite: number | undefined = $state(-1);
+	let searchedService: number | undefined = $state(-1);
+	let search: string | undefined = $state();
+
+	const handleSearch = () => {
+		filteredSalaries = [];
+
+		data.salaries.forEach((salarie: SalarieType) => {
+			if (
+				(!searchedSite || searchedSite === -1) &&
+				(!searchedService || searchedService === -1) &&
+				!search
+			) {
+				filteredSalaries = data.salaries;
+			}
+			if (
+				salarie.service.id === searchedService ||
+				salarie.site.id === searchedSite ||
+				(salarie &&
+					search &&
+					(salarie.nom.includes(search) ||
+						salarie.prenom.includes(search) ||
+						salarie.email.includes(search) ||
+						salarie.telFixe.includes(search) ||
+						salarie.telPortable.includes(search)))
+			) {
+				filteredSalaries.push(salarie);
+			}
+		});
+
+		filteredSalaries = [...filteredSalaries];
+	};
+	handleSearch();
 
 	const handleNew = () => {
 		selectedSalarie = undefined;
@@ -32,6 +67,16 @@
 	{#if data.authed}
 		<Button variant="raised" onclick={handleNew}>Ajouter un salarie</Button>
 	{/if}
+
+	<Searchbar
+		onSearch={handleSearch}
+		services={data.services}
+		bind:search
+		sites={data.sites}
+		bind:searchedSite
+		bind:searchedService
+	/>
+
 	<div class="salaries-container">
 		<DataTable table$aria-label="Salaries">
 			<Head>
@@ -50,7 +95,7 @@
 				</Row>
 			</Head>
 			<Body>
-				{#each data.salaries as salarie}
+				{#each filteredSalaries as salarie}
 					<Salarie
 						{salarie}
 						authed={data.authed}

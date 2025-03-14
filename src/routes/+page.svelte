@@ -10,7 +10,6 @@
 	import TabBar from '@smui/tab-bar';
 
 	let { data }: PageProps = $props();
-	let salaries: SalarieType[] = $state(data.salaries);
 	let activePage = $state('Salaries');
 	let tabs: string[] = $state([]);
 

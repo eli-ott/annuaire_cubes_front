@@ -64,22 +64,18 @@
 			? { path: 'salarie', data: { id: salarie.id, ...data } }
 			: { path: 'salarie', data };
 
-		try {
-			const response = await fetch('/api', {
-				method,
-				body: JSON.stringify(requestData)
-			});
+		const response = await fetch('/api', {
+			method,
+			body: JSON.stringify(requestData)
+		});
+		const res = await response.json();
 
-			const res = await response.json();
-
-			if (res.data.status === 200 || response.ok) {
-				invalidateAll();
-			} else {
-				alert(res.data.message || 'Une erreur est survenu');
-			}
-		} catch (error) {
-			console.error('Error modifying salarie:', error);
+		if (!response.ok || res.data.status !== 200) {
+			alert(res.data.message ?? 'Une erreur est survenue');
+			return;
 		}
+
+		invalidateAll();
 	};
 </script>
 
@@ -126,12 +122,12 @@
 			label="Email"
 			style="width: 100%"
 		></Textfield>
-		<Select bind:value={service} label="Select Menu" style="width: 100%">
+		<Select bind:value={service} label={!service ? 'Service' : ''} style="width: 100%">
 			{#each servicesList as service}
 				<Option value={service.id}>{service.nom}</Option>
 			{/each}
 		</Select>
-		<Select bind:value={site} label="Select Menu" style="width: 100%">
+		<Select bind:value={site} label={!site ? 'Site' : ''} style="width: 100%">
 			{#each sitesList as site}
 				<Option value={site.id}>{site.nom} ({site.ville})</Option>
 			{/each}

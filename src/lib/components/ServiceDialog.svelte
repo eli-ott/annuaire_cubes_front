@@ -34,26 +34,27 @@
 			? { path: 'service', data: { id: service.id, ...data } }
 			: { path: 'service', data };
 
-		try {
-			const response = await fetch('/api', {
-				method,
-				body: JSON.stringify(requestData)
-			});
+		const response = await fetch('/api', {
+			method,
+			body: JSON.stringify(requestData)
+		});
+		const res = await response.json();
 
-			const res = await response.json();
-
-			if (res.data.status === 200 || response.ok) {
-				invalidateAll();
-			} else {
-				alert(res.data.message || 'Une erreur est survenu');
-			}
-		} catch (error) {
-			console.error('Error modifying service:', error);
+		if (!response.ok || res.data.status !== 200) {
+			alert(res.data.message ?? 'Une erreur est survenue');
+			return;
 		}
+
+		invalidateAll();
 	};
 </script>
 
-<Dialog bind:open aria-labelledby="simple-title" aria-describedby="service-dialog" onSMUIDialogClosed={dialogClose}>
+<Dialog
+	bind:open
+	aria-labelledby="simple-title"
+	aria-describedby="service-dialog"
+	onSMUIDialogClosed={dialogClose}
+>
 	<Title id="simple-title">{service ? 'Modifier' : 'Ajouter'} un service</Title>
 	<Content id="service-dialog">
 		<Textfield

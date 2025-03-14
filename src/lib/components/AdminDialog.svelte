@@ -1,10 +1,7 @@
 <script lang="ts">
 	import Dialog, { Title, Content, Actions } from '@smui/dialog';
 	import Button, { Label } from '@smui/button';
-	import Textfield from '@smui/textfield';
-	import type { Service } from '$lib/models/Service';
 	import type { Salarie } from '$lib/models/Salarie';
-	import { invalidateAll } from '$app/navigation';
 	import Select, { Option } from '@smui/select';
 	import { verifyObjectFields } from '$lib/Utils/sharedUtils';
 
@@ -37,14 +34,14 @@
 				}
 			})
 		});
-
 		const res = await modifyFetch.json();
 
-		if (res.data.status === 200 || modifyFetch.ok) {
-			update();
-		} else {
-			alert(res.data.message || 'Une erreur est survenu');
+		if (!modifyFetch.ok || res.data.status !== 200) {
+			alert(res.data.message ?? 'Une erreur est survenue');
+			return;
 		}
+
+		update();
 	};
 </script>
 
@@ -56,7 +53,7 @@
 >
 	<Title id="simple-title">Ajouter un admin</Title>
 	<Content id="service-dialog">
-		<Select bind:value={idUser} label="Select Menu" style="width: 100%">
+		<Select bind:value={idUser} label={!idUser ? 'Salarie' : ''} style="width: 100%">
 			{#each salaries as salarie}
 				<Option value={salarie.id}>{salarie.nom} {salarie.prenom}</Option>
 			{/each}

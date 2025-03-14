@@ -17,14 +17,14 @@
 				id: site.id
 			})
 		});
-
 		const res = await deleteFetch.json();
 
-		if (res.data.status === 200 || deleteFetch.ok) {
-			invalidateAll();
-		} else {
-			alert(res.data.message || 'Une erreur est survenu');
+		if (!deleteFetch.ok || res.data.status !== 200) {
+			alert(res.data.message ?? 'Une erreur est survenue');
+			return;
 		}
+
+		invalidateAll();
 	};
 
 	const handleModify = () => {
