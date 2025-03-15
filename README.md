@@ -36,3 +36,8 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+
+
+## .env
+
+To configure your `.env` you need to copy the contents of the `.env.example` in a `.env` file, and assign the values based on your API information. For the `API_KEY` make sure they are the same in your front-end and in your back-end. As for the `API_URL` it is only the base path, for example `http://localhost:5098/`, make sure this variable match what you have in your API.
