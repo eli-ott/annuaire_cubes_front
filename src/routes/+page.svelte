@@ -23,6 +23,10 @@
 	const sequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'Enter'];
 	let currentIndex = 0;
 
+	/**
+	 * Handle the key sequence
+	 * @param {KeyboardEvent} event
+	 */
 	const handleSequence = (event: KeyboardEvent) => {
 		if (event.key === sequence[currentIndex]) {
 			currentIndex++;
@@ -35,6 +39,9 @@
 		}
 	};
 
+	/**
+	 * Handle the log out of the user
+	 */
 	const handleDisconnect = async () => {
 		const disconnectFetch = await fetch('/api/auth', {
 			method: 'DELETE'
