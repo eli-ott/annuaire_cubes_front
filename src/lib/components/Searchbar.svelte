@@ -28,15 +28,15 @@
 		bind:value={search}
 		input$emptyValueUndefined
 		label="Recherche"
-		style="width: 50%"
+		style="width: 350px"
 	></Textfield>
-	<Select bind:value={searchedService} label={!searchedService ? 'Service' : ''} style="width: 20%">
+	<Select bind:value={searchedService} label={!searchedService ? 'Service' : ''} style="width: 150px">
 		<Option value={-1}>Tous</Option>
 		{#each services as service}
 			<Option value={service.id}>{service.nom}</Option>
 		{/each}
 	</Select>
-	<Select bind:value={searchedSite} label={!searchedSite ? 'Site' : ''} style="width: 20%">
+	<Select bind:value={searchedSite} label={!searchedSite ? 'Site' : ''} style="width: 150px">
 		<Option value={-1}>Tous</Option>
 		{#each sites as site}
 			<Option value={site.id}>{site.nom} ({site.ville})</Option>
@@ -49,7 +49,7 @@
 	@use '$lib/style/main.scss';
 
 	.searchbar {
-		@include main.flex($direction: row, $gap: main.$margin-m);
+		@include main.flex($direction: row, $gap: main.$margin-m, $wrap: wrap);
 
 		width: 100%;
 	}

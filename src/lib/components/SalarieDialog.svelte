@@ -91,6 +91,7 @@
 			return;
 		}
 
+		document.location.reload();
 		invalidateAll();
 	};
 </script>
